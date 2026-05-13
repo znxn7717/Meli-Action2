@@ -1,0 +1,35 @@
+name: Convert MP4 to MP3
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_url:
+        description: "Direct link to mp4 file"
+        required: true
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run converter
+        run: |
+          python convert.py "${{ github.event.inputs.video_url }}"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: converted-mp3
+          path: downloads/output.mp3
