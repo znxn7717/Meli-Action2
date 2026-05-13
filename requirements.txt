@@ -1,0 +1,3 @@
+moviepy
+requests
+imageio-ffmpeg
