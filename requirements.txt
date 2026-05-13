@@ -1,3 +1,4 @@
-moviepy
-requests
-imageio-ffmpeg
+moviepy==1.0.3
+requests==2.32.3
+imageio-ffmpeg==0.5.1
+decorator==4.4.2
