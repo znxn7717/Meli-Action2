@@ -1,0 +1,57 @@
+name: 📡 Fetch Telegram Channel
+
+on:
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: 'Channel username (without @)'
+        required: true
+        type: string
+      count:
+        description: 'Number of messages to fetch'
+        required: false
+        default: '100'
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 lxml
+
+      - name: Create channels directory
+        run: mkdir -p channels
+
+      - name: Fetch channel
+        run: |
+          python scripts/fetch_channel.py \
+            --channel "${{ github.event.inputs.channel }}" \
+            --count "${{ github.event.inputs.count }}"
+
+      - name: Check if files were created
+        run: |
+          if [ -z "$(ls -A channels/)" ]; then
+            echo "❌ Error: No files created in channels/ directory"
+            exit 1
+          fi
+          ls -lah channels/
+
+      - name: Commit to repo
+        run: |
+          git config user.name "TG Reader Bot"
+          git config user.email "bot@tgreader.local"
+          git add channels/
+          git commit -m "📡 @${{ github.event.inputs.channel }} — $(date +'%Y-%m-%d %H:%M') UTC"
+          git push
