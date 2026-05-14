@@ -50,6 +50,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests moviepy imageio-ffmpeg decorator
 
+      - name: Create downloads directory
+        run: mkdir -p downloads
+
       - name: Run converter
         run: |
           urls=()
