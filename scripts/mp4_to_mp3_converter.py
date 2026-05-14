@@ -3,10 +3,11 @@ import os
 import requests
 from urllib.parse import urlparse, unquote
 from moviepy.editor import VideoFileClip
+from pathlib import Path
 
-DOWNLOAD_DIR = "downloads"
-os.makedirs(DOWNLOAD_DIR, exist_ok=True)
-
+BASE_DIR = Path(__file__).resolve().parent.parent
+DOWNLOAD_DIR = BASE_DIR / "downloads"
+DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 def get_filename_from_url(url, default_name="file.mp4"):
     path = urlparse(url).path
