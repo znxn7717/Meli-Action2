@@ -71,7 +71,7 @@ jobs:
             urls+=("${{ github.event.inputs.video_url_5 }}")
           fi
 
-          python convert.py "${urls[@]}"
+          python scripts/mp4_to_mp3_converter.py "${urls[@]}"
 
       - name: Commit and push output files
         run: |
